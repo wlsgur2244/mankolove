@@ -1,0 +1,433 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>love letter</title>
+  <meta name="language" content="ko">
+  <meta name="title" content="love letter">
+  <meta name="github" content="https://github.com/woorim960/love-letters-collection">
+  <meta name="describe" content="우리밋,고백,프로포즈,propose,code">
+  <link rel="icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/sun0225SUN/photos/img/20210715233345.png">
+  <link type="text/css" rel="stylesheet" href="css/theme.css" />
+  <script src="js/jquery-2.0.3.min.js"></script>
+</head>
+
+<body>
+  <div id="div_container">
+    <!-- 가장 바깥쪽 div, 중앙 호환 PC 및 모바일용 -->
+    <div id="div_start_bg"></div>
+    <div id="div_onlyyou">
+      <!-- 배경 설정 -->
+      <div id="div_oy_inner">
+        <!-- 컨텐츠 저장에 사용 -->
+        <div class="div_oy_text">
+          <h1></h1>
+          <img class="img_oy_text" src="" />
+          <p class="p_oy_text"></p>
+          <div></div>
+
+          <ul id="ul_oy_benefit">
+            <li class="li_oy_benefit"></li>
+            <li class="li_oy_benefit"></li>
+            <li class="li_oy_benefit"></li>
+            <li class="li_oy_benefit"></li>
+            <li class="li_oy_benefit"></li>
+            <li class="li_oy_benefit"></li>
+            <li class="li_oy_benefit"></li>
+            <li class="li_oy_benefit"></li>
+            <li class="li_oy_benefit"></li>
+            <li class="li_oy_benefit"></li>
+            <li class="li_oy_benefit"></li>
+            <li class="li_oy_benefit"></li>
+            <li class="li_oy_benefit"></li>
+            <li class="li_oy_benefit"></li>
+            <li class="li_oy_benefit"></li>
+            <li class="li_oy_benefit"></li>
+            <li class="li_oy_benefit"></li>
+            <li class="li_oy_benefit"></li>
+            <li class="li_oy_benefit"></li>
+            <li class="li_oy_benefit"></li>
+          </ul>
+        </div>
+        <ul id="ul_oy_btn">
+
+          <li onclick="oy_go_next()">行く&nbsp;&nbsp;❤</li>
+          <li onclick="oy_show_benefit()">だめ&nbsp;&nbsp;✖</li>
+        </ul>
+        <div id="div_oy_note" onclick="oy_hide_note()">
+          <img src="images/맞짱.jpg" alt="" /><br />그냥 맞짱까든가..
+          <div id="div_oy_note_close">✖</div>
+        </div>
+        <div id="div_oy_yes">
+          <img src="images/올.jpg" alt="" /><br />자기 최고!
+        </div>
+      </div>
+    </div>
+    <div class="div_pure_words">
+      <div class="div_pure_words_bg">
+        <div class="div_pure_words_height"></div>
+      </div>
+      <div class="div_pw_typed">
+        <span id="span_pw_typed"></span>
+      </div>
+    </div>
+    <div id="div_btn_container">
+      <div id="div_btn_inner">
+
+        <div class="div_music_tips"></div>
+        <div class="div_btn" id="div_music" onclick="music_switch()">
+          <!-- 음악 버튼 -->
+          <img id="img_music" src="images/music_note_big.png"
+            style="-webkit-animation: music_play_rotate 1s linear infinite;" />
+          <!-- 브라우저에서 음악 재생을 지원하지 않습니다 -->
+          <audio id="audio_music" autoplay="autoplay" loop="loop">
+            <source type="audio/mpeg" />
+          </audio>
+        </div>
+        <div class="div_record_tips"></div>
+        <div class="div_btn" id="div_record" onclick="record_switch()">
+          <audio id="audio_record" loop="loop">
+            <source type="audio/mpeg" />
+          </audio>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <script>
+    // 클라이언트 디바이스 판단, 메타데이터 쓰기
+    function init_viewport() {
+      if (navigator.userAgent.indexOf("Android") != -1) {
+        var version = parseFloat(RegExp.$1);
+        if (version > 2.3) {
+          var width =
+            window.outerWidth == 0 ? window.screen.width : window.outerWidth;
+          var phoneScale = parseInt(width) / 500;
+          document.write(
+            '<meta name="viewport" content="width=500, minimum-scale = ' +
+            phoneScale +
+            ", maximum-scale = " +
+            phoneScale +
+            ', target-densitydpi=device-dpi">'
+          );
+        } else {
+          document.write(
+            '<meta name="viewport" content="width=500, target-densitydpi=device-dpi, user-scalable=0">'
+          );
+        }
+      } else if (navigator.userAgent.indexOf("iPhone") != -1) {
+        var phoneScale = parseInt(window.screen.width) / 500;
+        document.write(
+          '<meta name="viewport" content="width=500, min-height=750, initial-scale=' +
+          phoneScale +
+          ", maximum-scale=" +
+          phoneScale +
+          ', user-scalable=0" /> '
+        ); //0.75   0.82
+      } else {
+        document.write(
+          '<meta name="viewport" content="width=500, height=750, initial-scale=0.64" /> '
+        ); //0.75  0.82
+      }
+    }
+    init_viewport();
+
+    // 날짜 구하기
+    var today = new Date();   
+
+    var year = today.getFullYear(); // 년도
+    var month = today.getMonth() + 1;  // 월
+    var date = today.getDate();  // 날짜
+    var day = today.getDay();  // 요일
+    var hours = today.getHours(); // 시
+    var minutes = today.getMinutes();  // 분
+    var seconds = today.getSeconds();  // 초
+
+    var theme = "pure_words";
+    console.log("theme ->" + theme);
+    var theme_content = {
+      pure_words_content:
+        `안녕, 소현아.<br>
+오늘 자기한테 해줄 말이 있어서 이렇게 소소한 이벤트를 준비해봤어.<br>
+평소에도 나름 표현은 많이 한다고 생각하지만, 돌이켜보면 자기를 위해 제대로 감동적인 이벤트를 해준 적은 별로 없는 것 같더라. 그래서 오늘만큼은 자기가 오래오래 기억할 수 있는 하루를 만들어주고 싶었어.<br>
+준비한 게 조금 서투르고 부족할 수도 있겠지만, 내가 얼마나 많이 고민했고 어떤 마음으로 준비했는지가 온전히 전해졌으면 좋겠어. 그리고 지금 이 순간만큼은 다른 생각 하나도 없이 그냥 행복으로 가득했으면 좋겠다.<br>
+내가 자기한테 마음을 들키고 나서, 어떻게든 자기랑 조금이라도 더 가까워지고 싶어서 주말마다 보러 가도 되냐고 물어봤던 게 얼마 전 같은데 우리가 벌써 1년이 됐다, 그치?<br>
+그때는 그냥 자기를 한 번 더 보고 싶고, 한 시간이라도 더 같이 있고 싶다는 생각뿐이었는데 어느 순간부터 자기를 만나는 일이 내 일상에서 너무나 중요한 일이 됐어.<br>
+자기랑 함께했던 순간들이 나한테 너무 영광스런 시간들이야.<br>
+특별한 곳에 여행을 가고, 맛있는 걸 먹고, 새로운 걸 같이 경험했던 날들도 물론 기억에 남지만 이상하게 생각해보면 별것 없었던 평범한 순간들도 정말 많이 생각나. 같이 영통으로 밥 먹고, 궁댕이 똥 빵구로 서로 장난치고, 별 얘기 아닌 걸로 한참 웃었던 그런 순간들까지.<br>
+아마 그래서 더 좋은 것 같아.<br>
+자기랑 있으면 특별한 날이 특별해서 좋은 것도 있지만, 아무것도 없는 평범한 하루까지도 나한테는 좋은 기억이 되니까.<br>
+그리고 자기를 만나면서 나는 내가 생각했던 것보다 누군가에게 사랑을 퍼주고 행복하게 해주는 걸 정말 좋아하는 사람이라는 것도 처음 알았어.<br>
+자기한테 맛있는 걸 사주고 싶고, 좋은 곳에 데려가고 싶고, 재밌는걸 찾아서 같이 하고 싶고, 자기가 좋아할 만한 걸 발견하는게 내 낙이야.<br>
+내가 준비한 걸 보고 자기가 좋아할 때, 내가 한 말에 자기가 크게 웃을 때, 내가 고른 곳에서 자기가 행복해할 때 그런 모습을 보는 게 나한테 가장 큰 행복이 됐어.<br>
+잘 웃어주는 자기를 보면서 내 일상에도 웃음이 훨씬 많아졌고, 예전 같으면 그냥 지나쳤을 순간들도‘이거 자기랑 같이 하면 재밌겠다’,‘이거 보여주면 좋아하겠다’하고 생각을 해.<br>
+내 세상을 보는 방식에도 자기가 정말 많이 들어와 있는 것 같아.<br>
+물론 서로 서운했던 날도 있었고, 내가 부족하게 행동했던 순간도 있었고, 생각이 달라서 부딪힌 적도 있었지만 우리가 그런 시간들을 지나면서 오히려 서로를 더 많이 이해하게 된 것 같아.<br>
+사랑한다는 게 단순히 좋은 순간을 같이 보내는 것만은 아니라는 것도 자기 덕분에 많이 배웠어. 서로 다른 두 사람이 조금씩 맞춰가고, 서운하면 이야기하고, 미안하면 사과하고, 그래도 다시 서로를 선택하는 과정까지 전부 사랑이라는 걸 알게 됐어.
+그래서 지금의 나는 처음 자기를 좋아하기 시작했을 때보다 자기를 훨씬 더 많이 사랑하고 있다고 자부해.<br>
+처음에는 예쁘고,밝고,같이 있으면 즐거운 사람이어서 좋았다면 지금은 자기의 좋은 모습뿐 아니라 자기의 걱정도,고민도,때로는 예민한 모습도 전부 포함해서 그냥‘김소현’이라는 사람 자체가 너무 소중해.<br>
+지금까지 항상 내 옆에 있어줘서 고마워.<br>
+그리고 내가 힘들거나 지칠 때도 내 편이 되어주고,별것 아닌 내 이야기까지 들어주고,같이 웃어줘서 정말정말 고마워.<br>
+앞으로도 지금처럼 자기가 많이 웃었으면 좋겠어.
+하고 싶은 것도 많이 하고, 가고 싶은 곳도 많이 가고, 맛있는 것도 많이 먹고,하고 싶은 것들을 마음껏 하면서 살았으면 좋겠다.<br>
+그리고 그 많은 순간들 옆에 내가 있었으면 좋겠어.
+자기가 신나는 일이 있을 때 제일 먼저 같이 기뻐해주고,힘든 날에는 제일 편하게 기대도 되는 사람,재미있는 일이 생기면 가장 먼저 말해주고 싶은 사람이 계속 나였으면 좋겠다.<br>
+가끔은 내가 자기를 열받게 하는 날도 분명 있을 거고, 내가 먼저 삐지는 날도 많이 있을 거야.<br>
+그래도 하나는 자신 있게 약속할 수 있어.<br>
+자기가 웃는 날을 우는 날보다 훨씬 많이 만들어 줄거야.
+자기와 함께할 미래엔 아직 우리가 한 번도 가보지 못한 곳도 많고,같이 먹어보지 못한 음식도 많고,만들어갈 추억도 엄청나게 많이 남아 있어.
+그래서 나는 지금까지의 1년도 너무 좋았지만, 앞으로 같이 보낼 시간이 더 기대돼.
+글이 엄청 많지 ㅠㅠ 마지막으로 오늘 꼭 전하고 싶은 말!<br>(찐막이야)<br><br>
+
+소현아, 태어나줘서 고마워.<br>
+그리고 수많은 사람들 중에서 결국 서로를 만나서, 좋아하게 되고, 지금 이렇게 자기 생일을 축하해줄 수 있어서 정말 다행이야.<br>
+2026년의 생일을 진심으로 축하하고, 내년 생일에는 올해보다 더 행복하게 해줄게. 그다음 해에는 또 그보다 더 많이.<br>
+그렇게 생일이 하나씩 늘어갈 때마다 우리가 함께 만든 추억도 같이 늘어갔으면 좋겠다.<br>
+지금까지 나에게도 행복한 시간 많이 선물해줘서 너무너무 고맙고,<br>
+앞으로도 자기가 더 밝고 행복할 수 있도록 내가 옆에서 많이 웃게 해줄게.<br>
+생일 정말 많이 축하해, 소현아.<br>
+사랑해. 뽀에버! <um style='color: #F44336;'>❤️</um>`,
+      typed_bool: "typed_y",
+      cursor_char: "cursor_heart",
+      bg_style_pure_words: "bg_opacity",
+      bg_img: "images/3.jpg",
+      simple_page_content: "",
+      video_page_content: "",
+    };
+    console.log(theme_content);
+
+    var music_json = {
+      music_select: "m_online",
+      m_online_id: "7",
+      m_online_url: "images/봉훈.mp3",
+      m_upload_name: "null",
+      m_upload_url: "null",
+    };
+    console.log(music_json);
+    var record_json = {
+      record_bool: "r_false",
+      r_wechat_time: "null",
+      r_wechat_url: "null",
+      r_wechat_amr: "null",
+    };
+    console.log(record_json);
+
+    var main_title = "I Love You ❤️";
+
+    // console.log(main_title);
+    if (main_title == "" || main_title == "null") {
+      // 제목이 빈 경우 아래 타이틀 삽입
+      document.title = "I Love You ❤️";
+    }
+
+    var window_height = $(window).height();
+    console.log("window_height ->" + window_height);
+    var pure_words_content = theme_content["pure_words_content"];
+    var str_cursorChar;
+    var typed_bool;
+    var interval_pw_height;
+    var height_div_pw = $(".div_pure_words_height").height();
+
+    function init_pure_words() {
+      $(".div_pure_words_height").html(pure_words_content + "22222"); // 복사 내용을 초기화하고 문서 높이를 늘립니다
+      // div의 bg 그림 초기화 설정
+      if (
+        typeof theme_content["bg_style_pure_words"] != "undefined" &&
+        theme_content["bg_style_pure_words"] == "bg_opacity"
+      ) {
+        if (
+          typeof theme_content["bg_img"] != "undefined" &&
+          theme_content["bg_img"] != ""
+        ) {
+          $(".div_pure_words_bg").css({
+            "background-image": "url(" + theme_content["bg_img"] + ")",
+          });
+        }
+      }
+      // 다음은 타이핑 효과의 js입니다.
+      if (
+        typeof theme_content["cursor_char"] != "undefined" &&
+        theme_content["cursor_char"] != ""
+      ) {
+        switch (
+        theme_content["cursor_char"] // 타이핑 커서 스타일 설정
+        ) {
+          case "cursor_heart":
+            str_cursorChar = '<um style="color: #F44336;">❤</um>';
+            break;
+          case "cursor_sub":
+            str_cursorChar = "_";
+            break;
+          case "cursor_music":
+            str_cursorChar = "♫";
+            break;
+          case "cursor_star":
+            str_cursorChar = "★";
+            break;
+          case "cursor_sun":
+            str_cursorChar = "☀";
+            break;
+          default:
+            str_cursorChar = "|";
+        }
+      } else {
+        // 새로운 작품을 처리하고, 기본적으로 타이핑 효과를 표시합니다.
+        str_cursorChar = "❤";
+      }
+
+      // 사용자가 타이핑 효과를 선택했는지 여부를 판단하다
+      if (
+        typeof theme_content["typed_bool"] != "undefined" &&
+        theme_content["typed_bool"] != ""
+      ) {
+        typed_bool = theme_content["typed_bool"] == "typed_y" ? true : false;
+      } else {
+        typed_bool = false; // 기본적으로 타이핑 효과 보이기
+      }
+
+      display_pure_words();
+      $(".div_pure_words").fadeIn();
+
+      interval_pw_height = setInterval(function () {
+        console.log(
+          "div_pure_words_height -> " + $(".div_pure_words_height").height()
+        );
+        var least_height_div_pw = $(".div_pure_words_height").height();
+        if (least_height_div_pw > height_div_pw) {
+          height_div_pw = least_height_div_pw;
+        } else {
+          clearInterval(interval_pw_height);
+          $(".div_pure_words_height").height(least_height_div_pw + 100);
+          if ($(".div_pure_words_height").height() < window_height) {
+            $(".div_pure_words_height").height(window_height); // 창 높이보다 작을 수 없음
+            console.log("let us be high as window");
+          }
+        }
+      }, 100);
+    }
+
+    function display_pure_words() {
+      if (typed_bool) {
+        var typed_pure_words = new Typed("#span_pw_typed", {
+          strings: [pure_words_content], // 내용 입력, HTML 태그 지원
+          typeSpeed: 30, // 타이핑 속도
+          cursorChar: str_cursorChar, // 커서 스타일 바꾸기
+          contentType: "html", // 값이 html일 경우 인쇄된 텍스트 라벨을 html 라벨로 직접 해석
+          onComplete: function (abc) {
+            // console.log(abc);
+            console.log("finished typing words");
+            // console.log($('#span_pw_typed').height()-$(".div_pure_words_height").height());
+          },
+        });
+      } else {
+        // 타이핑이 필요하지 않으면 바로 표시
+        $("#span_pw_typed").html(pure_words_content).fadeIn();
+      }
+      init_attachment();
+    }
+
+    var start_content = {
+      chase_title:
+        "To. 소현❣️",
+      chase_text:
+        "생일 미리 축하해!<br><br>오늘 내일 나랑 맛있는 것도 먹고<br>사진도 많이 찍고, 드라이브도 가자!<br>해본 적 없지만 별도 달도 따줄게!<br>자기가 하고 싶은 거 다 말해💕<br><br><um style='color: #F44336; font-weight: 300;'>자걍~생일 진짜 많이 축하해🎉❤️</um>",
+      chase_benefit: [
+        "뭐여 진짜 누른겨",
+        "양념게장 먹구시퍼? 10마리 사줄게!",
+        "궁둥이 볼기짝 10대? 진짜 원해? 다시 생각해 봐",
+        "자기 싸우고 시펑? 피나고 시펑?",
+        "원하는게 뭐여! 지금 나한테 말로 해",
+        "<um style='color: #F44336;font-weight: 300;'>이번엔 경고다 그만 눌러라ㅎ</um>"
+      ],
+      bg_style: "bg_custom",
+      bg_img: "images/1번.jpg",
+      img_bool: "img_true",
+      img_src: "images/12.gif",
+    }; // null일 수 있음
+    console.log(start_content);
+    var start_id;
+    $(function () {
+      // 이 이벤트는 인터랙티브한 아이디어를 촉발합니다
+      start_id = "onlyyou"; // null일 수 있음
+      init_start(start_id);
+    });
+
+    function init_start(start_id) {
+      console.log("init_start ->" + start_id);
+      switch (start_id) {
+        case "loveformat":
+          $(".div_loveformat").show();
+          init_loveformat();
+          break;
+        case "hearttree":
+          $("#div_hearttree").show();
+          init_hearttree();
+          break;
+        case "courage":
+          $("#div_courage").show();
+          init_courage();
+          break;
+        case "birthdaycake":
+          $("#div_dbcake").show();
+          init_birthdaycake();
+          break;
+        case "intersect":
+          $("#div_intersect").show();
+          init_intersect();
+          break;
+        case "onlyyou":
+          $("#div_onlyyou").show();
+          init_onlyyou();
+          break;
+        default:
+          init_theme();
+      }
+    }
+
+    // 애니메이션 본체 시작
+    function init_theme() {
+      console.log("init_theme");
+
+      // 날짜 구하기
+      year = today.getFullYear(); // 년도
+      month = today.getMonth() + 1;  // 월
+      date = today.getDate();  // 날짜
+      day = today.getDay();  // 요일
+      hours = today.getHours(); // 시
+      minutes = today.getMinutes();  // 분
+      seconds = today.getSeconds();  // 초
+      
+      $("#div_start_bg").fadeOut();
+      init_pure_words();
+    }
+    var attachment = "null"; // null일 수 있음
+    var attached_content = {
+      bool_save: false,
+    }; // null일 수 있음
+    console.log(attached_content);
+
+    function init_attachment() {
+      // attachment 시작
+      console.log("init_attachment ->" + attachment);
+      switch (attachment) {
+        case "timer":
+          init_at_timer();
+          break;
+        default:
+          return;
+      }
+    }
+  </script>
+
+  <!-- JQuery -->
+  <script src="js/typed.min.js"></script>
+  <script src="js/start_onlyyou.js"></script>
+  <script src="js/jweixin-1.2.0.js"></script>
+  <script src="js/theme_common.js"></script>
+</body>
+
+</html>
